@@ -26,6 +26,16 @@ public class TicTacToeActivity extends AppCompatActivity {
     ImageView sEight;
     ImageView sNine;
 
+    Boolean sOneMarked;
+    Boolean sTwoMarked;
+    Boolean sThreeMarked;
+    Boolean sFourMarked;
+    Boolean sFiveMarked;
+    Boolean sSixMarked;
+    Boolean sSevenMarked;
+    Boolean sEightMarked;
+    Boolean sNineMarked;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +53,16 @@ public class TicTacToeActivity extends AppCompatActivity {
         sEight = (ImageView) findViewById(R.id.sEight);
         sNine = (ImageView) findViewById(R.id.sNine);
 
+        sOneMarked = false;
+        sTwoMarked = false;
+        sThreeMarked = false;
+        sFourMarked = false;
+        sFiveMarked = false;
+        sSixMarked = false;
+        sSevenMarked = false;
+        sEightMarked = false;
+        sNineMarked = false;
+
         turn = 1;
 
         // prompt other player to make move
@@ -59,34 +79,45 @@ public class TicTacToeActivity extends AppCompatActivity {
      * @param view tile that was clicked
      */
     public void makeMove(View view) {
-        Boolean isGameOver;
+        Boolean isGameOver = false;
 
-        if (view.equals(sOne)) {
-            draw(sOne);
-        } else if (view.equals(sTwo)) {
-            draw(sTwo);
-        } else if (view.equals(sThree)) {
-            draw(sThree);
-        } else if (view.equals(sFour)) {
-            draw(sFour);
-        } else if (view.equals(sFive)) {
-            draw(sFive);
-        } else if (view.equals(sSix)) {
-            draw(sSix);
-        } else if (view.equals(sSeven)) {
-            draw(sSeven);
-            isGameOver = checkGameOver();
-        } else if (view.equals(sEight)) {
-            draw(sEight);
-        } else if (view.equals(sNine)) {
-            draw(sNine);
+        if (!isGameOver) {
+            if (view.equals(sOne) && !sOneMarked) {
+                draw(sOne);
+                sOneMarked = true;
+            } else if (view.equals(sTwo) && !sTwoMarked) {
+                draw(sTwo);
+                sTwoMarked = true;
+            } else if (view.equals(sThree) && !sThreeMarked) {
+                draw(sThree);
+                sThreeMarked = true;
+            } else if (view.equals(sFour) && !sFourMarked) {
+                draw(sFour);
+                sFourMarked = true;
+            } else if (view.equals(sFive) && !sFiveMarked) {
+                draw(sFive);
+                sFiveMarked = true;
+            } else if (view.equals(sSix) && !sSixMarked) {
+                draw(sSix);
+                sSixMarked = true;
+            } else if (view.equals(sSeven) && !sSevenMarked) {
+                draw(sSeven);
+                sSevenMarked = true;
+            } else if (view.equals(sEight) && !sEightMarked) {
+                draw(sEight);
+                sEightMarked = true;
+            } else if (view.equals(sNine) && !sNineMarked) {
+                draw(sNine);
+                sNineMarked = true;
+            }
         }
+
 
         isGameOver = checkGameOver();
 
-        if(isGameOver) {
+        if (isGameOver) {
             Toast toast = new Toast(this).makeText(this, "GAME OVER", Toast.LENGTH_LONG);
-            toast.setMargin(50, 50);
+            toast.setMargin(0, 0);
             toast.show();
         } else {
             // prompt other player to make move
@@ -94,9 +125,6 @@ public class TicTacToeActivity extends AppCompatActivity {
             Toast toast = new Toast(this).makeText(this, player, Toast.LENGTH_SHORT);
             toast.show();
         }
-
-
-
 
 
     }
@@ -143,7 +171,7 @@ public class TicTacToeActivity extends AppCompatActivity {
 
             return topRightDiagonalOver;
         } catch (Exception e) {
-             return false;
+            return false;
         }
     }
 
@@ -197,7 +225,7 @@ public class TicTacToeActivity extends AppCompatActivity {
 
             Boolean row3Over = areDrawablesIdentical(sSevenD, sEightD) && areDrawablesIdentical(sSevenD, sNineD);
 
-            return  row3Over;
+            return row3Over;
         } catch (Exception e) {
             return false;
         }
@@ -242,7 +270,7 @@ public class TicTacToeActivity extends AppCompatActivity {
         }
     }
 
-    // below code is not mine
+    // below code is from https://spotandroid.com/2017/02/15/android-tricks-how-to-compare-two-drawables/
     public static boolean areDrawablesIdentical(Drawable drawableA, Drawable drawableB) {
         Drawable.ConstantState stateA = drawableA.getConstantState();
         Drawable.ConstantState stateB = drawableB.getConstantState();
@@ -252,7 +280,7 @@ public class TicTacToeActivity extends AppCompatActivity {
                 || getBitmap(drawableA).sameAs(getBitmap(drawableB));
     }
 
-    // from online: below code is not mine
+    // below code is from https://spotandroid.com/2017/02/15/android-tricks-how-to-compare-two-drawables/
     public static Bitmap getBitmap(Drawable drawable) {
         Bitmap result;
         if (drawable instanceof BitmapDrawable) {
