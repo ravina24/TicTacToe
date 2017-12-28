@@ -130,7 +130,7 @@ public class TicTacToeActivity extends AppCompatActivity {
     }
 
     private Boolean checkGameOver() {
-        // check all possible game overs
+        // check all possible game overs for Win Situations
         Boolean row1Over = checkRowOne();
         Boolean row2Over = checkRowTwo();
         Boolean row3Over = checkRowThree();
@@ -140,11 +140,40 @@ public class TicTacToeActivity extends AppCompatActivity {
         Boolean topRightDiagonalOver = checkTopRightDiagonal();
         Boolean topLeftDiagonalOver = checkTopLeftDiagonal();
 
-        if (row1Over || row2Over || row3Over || column1Over || column2Over || column3Over || topRightDiagonalOver || topLeftDiagonalOver) {
+        // check if board is filled
+        Boolean tieGame = checkBoardFilled();
+
+        if (row1Over || row2Over || row3Over || column1Over || column2Over || column3Over
+                || topRightDiagonalOver || topLeftDiagonalOver || tieGame) {
             return true;
         } else {
             return false;
         }
+    }
+
+    private Boolean checkBoardFilled() {
+        try {
+            Drawable.ConstantState sOneD = sOne.getDrawable().getConstantState();
+            Drawable.ConstantState sTwoD = sTwo.getDrawable().getConstantState();
+            Drawable.ConstantState sThreeD = sThree.getDrawable().getConstantState();
+            Drawable.ConstantState sFourD = sFour.getDrawable().getConstantState();
+            Drawable.ConstantState sFiveD = sFive.getDrawable().getConstantState();
+            Drawable.ConstantState sSixD = sSix.getDrawable().getConstantState();
+            Drawable.ConstantState sSevenD = sSeven.getDrawable().getConstantState();
+            Drawable.ConstantState sEightD = sEight.getDrawable().getConstantState();
+            Drawable.ConstantState sNineD = sNine.getDrawable().getConstantState();
+
+            if(sOneD != null && sTwoD != null && sThreeD != null && sFourD != null && sFiveD != null && sSixD != null
+                    && sSevenD != null && sEightD != null && sNineD != null) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     private Boolean checkTopLeftDiagonal() {
