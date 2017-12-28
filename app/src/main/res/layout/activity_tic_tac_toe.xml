@@ -24,54 +24,81 @@
             android:id="@+id/sOne"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/border"
+            android:padding="3dp"
+            android:cropToPadding="true"
             android:onClick="makeMove"/>
 
         <ImageView
             android:id="@+id/sTwo"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/border"
+            android:padding="3dp"
+            android:cropToPadding="true"
             android:onClick="makeMove"/>
 
         <ImageView
             android:id="@+id/sThree"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/border"
+            android:padding="3dp"
+            android:cropToPadding="true"
             android:onClick="makeMove"/>
 
         <ImageView
             android:id="@+id/sFour"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/border"
+            android:padding="3dp"
+            android:cropToPadding="true"
             android:onClick="makeMove"/>
 
         <ImageView
             android:id="@+id/sFive"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/border"
+            android:padding="3dp"
+            android:cropToPadding="true"
             android:onClick="makeMove"/>
 
         <ImageView
             android:id="@+id/sSix"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/border"
+            android:padding="3dp"
+            android:cropToPadding="true"
             android:onClick="makeMove"/>
 
         <ImageView
             android:id="@+id/sSeven"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/border"
+            android:padding="3dp"
+            android:cropToPadding="true"
             android:onClick="makeMove"/>
 
         <ImageView
             android:id="@+id/sEight"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/border"
+            android:padding="3dp"
+            android:cropToPadding="true"
             android:onClick="makeMove"/>
 
         <ImageView
             android:id="@+id/sNine"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/border"
+            android:padding="3dp"
+            android:cropToPadding="true"
             android:onClick="makeMove"/>
 
     </GridLayout>
