@@ -1,5 +1,8 @@
 package com.example.ravina.tictactoe;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,56 +59,50 @@ public class TicTacToeActivity extends AppCompatActivity {
      * @param view tile that was clicked
      */
     public void makeMove(View view) {
+        Boolean isGameOver;
+
         if (view.equals(sOne)) {
             draw(sOne);
-        }
-
-        if (view.equals(sTwo)) {
+        } else if (view.equals(sTwo)) {
             draw(sTwo);
-        }
-
-        if (view.equals(sThree)) {
+        } else if (view.equals(sThree)) {
             draw(sThree);
-        }
-
-        if (view.equals(sFour)) {
+        } else if (view.equals(sFour)) {
             draw(sFour);
-        }
-
-        if (view.equals(sFive)) {
+        } else if (view.equals(sFive)) {
             draw(sFive);
-        }
-
-        if (view.equals(sSix)) {
+        } else if (view.equals(sSix)) {
             draw(sSix);
-        }
-
-        if (view.equals(sSeven)) {
+        } else if (view.equals(sSeven)) {
             draw(sSeven);
-        }
-
-        if (view.equals(sEight)) {
+            isGameOver = checkGameOver();
+        } else if (view.equals(sEight)) {
             draw(sEight);
-        }
-
-        if (view.equals(sNine)) {
+        } else if (view.equals(sNine)) {
             draw(sNine);
         }
 
-        checkGameOver();
+        isGameOver = checkGameOver();
+
+        if(isGameOver) {
+            Toast toast = new Toast(this).makeText(this, "GAME OVER", Toast.LENGTH_LONG);
+            toast.setMargin(50, 50);
+            toast.show();
+        } else {
+            // prompt other player to make move
+            String player = "Go Player " + turn;
+            Toast toast = new Toast(this).makeText(this, player, Toast.LENGTH_SHORT);
+            toast.show();
+        }
 
 
-        // prompt other player to make move
-        String player = "Go Player " + turn;
-        Toast toast = new Toast(this).makeText(this, player, Toast.LENGTH_SHORT);
-        toast.show();
+
 
 
     }
 
-    private void checkGameOver() {
-        // get marks from each square
-
+    private Boolean checkGameOver() {
+        // check all possible game overs
         Boolean row1Over = checkRowOne();
         Boolean row2Over = checkRowTwo();
         Boolean row3Over = checkRowThree();
@@ -116,9 +113,9 @@ public class TicTacToeActivity extends AppCompatActivity {
         Boolean topLeftDiagonalOver = checkTopLeftDiagonal();
 
         if (row1Over || row2Over || row3Over || column1Over || column2Over || column3Over || topRightDiagonalOver || topLeftDiagonalOver) {
-            Toast toast = new Toast(this).makeText(this, "GAME OVER", Toast.LENGTH_LONG);
-            toast.setMargin(50, 50);
-            toast.show();
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -128,7 +125,8 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sFiveD = sFive.getDrawable();
             Drawable sSevenD = sSeven.getDrawable();
 
-            Boolean topLeftDiagonalOver = sThreeD.equals(sFiveD) && sThreeD.equals(sSevenD);
+            Boolean topLeftDiagonalOver = areDrawablesIdentical(sThreeD, sFiveD) && areDrawablesIdentical(sThreeD, sSevenD);
+
             return topLeftDiagonalOver;
         } catch (Exception e) {
             return false;
@@ -141,7 +139,8 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sFiveD = sFive.getDrawable();
             Drawable sNineD = sNine.getDrawable();
 
-            Boolean topRightDiagonalOver = sOneD.equals(sFiveD) && sOneD.equals(sNineD);
+            Boolean topRightDiagonalOver = areDrawablesIdentical(sOneD, sFiveD) && areDrawablesIdentical(sOneD, sNineD);
+
             return topRightDiagonalOver;
         } catch (Exception e) {
              return false;
@@ -154,7 +153,8 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sSixD = sSix.getDrawable();
             Drawable sNineD = sNine.getDrawable();
 
-            Boolean column3Over = sThreeD.equals(sSixD) && sThreeD.equals(sNineD);
+            Boolean column3Over = areDrawablesIdentical(sThreeD, sSixD) && areDrawablesIdentical(sThreeD, sNineD);
+
             return column3Over;
         } catch (Exception e) {
             return false;
@@ -167,7 +167,8 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sFiveD = sFive.getDrawable();
             Drawable sEightD = sEight.getDrawable();
 
-            Boolean column2Over = sTwoD.equals(sFiveD) && sTwoD.equals(sEightD);
+            Boolean column2Over = areDrawablesIdentical(sTwoD, sFiveD) && areDrawablesIdentical(sTwoD, sEightD);
+
             return column2Over;
         } catch (Exception e) {
             return false;
@@ -180,7 +181,8 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sFourD = sFour.getDrawable();
             Drawable sSevenD = sSeven.getDrawable();
 
-            Boolean column1Over = sOneD.equals(sFourD) && sOneD.equals(sSevenD);
+            Boolean column1Over = areDrawablesIdentical(sOneD, sFourD) && areDrawablesIdentical(sOneD, sSevenD);
+
             return column1Over;
         } catch (Exception e) {
             return false;
@@ -193,7 +195,8 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sEightD = sEight.getDrawable();
             Drawable sNineD = sNine.getDrawable();
 
-            Boolean row3Over = sSevenD.equals(sEightD) && sSevenD.equals(sNineD);
+            Boolean row3Over = areDrawablesIdentical(sSevenD, sEightD) && areDrawablesIdentical(sSevenD, sNineD);
+
             return  row3Over;
         } catch (Exception e) {
             return false;
@@ -206,7 +209,8 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sFiveD = sFive.getDrawable();
             Drawable sSixD = sSix.getDrawable();
 
-            Boolean row2Over = sFourD.equals(sFiveD) && sFourD.equals(sSixD);
+            Boolean row2Over = areDrawablesIdentical(sFourD, sFiveD) && areDrawablesIdentical(sFourD, sSixD);
+
             return row2Over;
         } catch (Exception e) {
             return false;
@@ -220,7 +224,7 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sTwoD = sTwo.getDrawable();
             Drawable sThreeD = sThree.getDrawable();
 
-            Boolean row1Over = sOneD.equals(sTwoD) && sOneD.equals(sThreeD);
+            Boolean row1Over = areDrawablesIdentical(sOneD, sTwoD) && areDrawablesIdentical(sOneD, sThreeD);
 
             return row1Over;
         } catch (Exception e) {
@@ -228,7 +232,7 @@ public class TicTacToeActivity extends AppCompatActivity {
         }
     }
 
-    public void draw(ImageView iv) {
+    private void draw(ImageView iv) {
         if (turn == 1) {
             iv.setImageResource(R.drawable.cross);
             turn++;
@@ -236,6 +240,40 @@ public class TicTacToeActivity extends AppCompatActivity {
             iv.setImageResource(R.drawable.circle);
             turn--;
         }
+    }
+
+    // below code is not mine
+    public static boolean areDrawablesIdentical(Drawable drawableA, Drawable drawableB) {
+        Drawable.ConstantState stateA = drawableA.getConstantState();
+        Drawable.ConstantState stateB = drawableB.getConstantState();
+        // If the constant state is identical, they are using the same drawable resource.
+        // However, the opposite is not necessarily true.
+        return (stateA != null && stateB != null && stateA.equals(stateB))
+                || getBitmap(drawableA).sameAs(getBitmap(drawableB));
+    }
+
+    // from online: below code is not mine
+    public static Bitmap getBitmap(Drawable drawable) {
+        Bitmap result;
+        if (drawable instanceof BitmapDrawable) {
+            result = ((BitmapDrawable) drawable).getBitmap();
+        } else {
+            int width = drawable.getIntrinsicWidth();
+            int height = drawable.getIntrinsicHeight();
+            // Some drawables have no intrinsic width - e.g. solid colours.
+            if (width <= 0) {
+                width = 1;
+            }
+            if (height <= 0) {
+                height = 1;
+            }
+
+            result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(result);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+        }
+        return result;
     }
 
 }
