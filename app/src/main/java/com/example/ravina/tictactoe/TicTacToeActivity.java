@@ -23,16 +23,6 @@ public class TicTacToeActivity extends AppCompatActivity {
     ImageView sEight;
     ImageView sNine;
 
-    Boolean sONeMarked;
-    Boolean sTwoMarked;
-    Boolean sThreeMarked;
-    Boolean sFourMarked;
-    Boolean sFiveMarked;
-    Boolean sSixMarked;
-    Boolean sSevenMarked;
-    Boolean sEightMarked;
-    Boolean sNineMarked;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,16 +40,6 @@ public class TicTacToeActivity extends AppCompatActivity {
         sEight = (ImageView) findViewById(R.id.sEight);
         sNine = (ImageView) findViewById(R.id.sNine);
 
-        sONeMarked = false;
-        sTwoMarked = false;
-        sThreeMarked = false;
-        sFourMarked = false;
-        sFiveMarked = false;
-        sSixMarked = false;
-        sSevenMarked = false;
-        sEightMarked = false;
-        sNineMarked = false;
-
         turn = 1;
 
         // prompt other player to make move
@@ -72,52 +52,44 @@ public class TicTacToeActivity extends AppCompatActivity {
 
     /**
      * If turn is 0, make a cross on view. If turn is 1, make circle on view
+     *
      * @param view tile that was clicked
      */
     public void makeMove(View view) {
-        if(view.equals(sOne)) {
+        if (view.equals(sOne)) {
             draw(sOne);
-            sONeMarked = true;
         }
 
-        if(view.equals(sTwo)) {
+        if (view.equals(sTwo)) {
             draw(sTwo);
-            sTwoMarked = true;
         }
 
-        if(view.equals(sThree)) {
+        if (view.equals(sThree)) {
             draw(sThree);
-            sThreeMarked = true;
         }
 
-        if(view.equals(sFour)) {
+        if (view.equals(sFour)) {
             draw(sFour);
-            sFourMarked = true;
         }
 
-        if(view.equals(sFive)) {
+        if (view.equals(sFive)) {
             draw(sFive);
-            sFiveMarked = true;
         }
 
-        if(view.equals(sSix)) {
+        if (view.equals(sSix)) {
             draw(sSix);
-            sSixMarked = true;
         }
 
-        if(view.equals(sSeven)) {
+        if (view.equals(sSeven)) {
             draw(sSeven);
-            sSevenMarked = true;
         }
 
-        if(view.equals(sEight)) {
+        if (view.equals(sEight)) {
             draw(sEight);
-            sEightMarked = true;
         }
 
-        if(view.equals(sNine)) {
+        if (view.equals(sNine)) {
             draw(sNine);
-            sNineMarked = true;
         }
 
         checkGameOver();
@@ -133,37 +105,127 @@ public class TicTacToeActivity extends AppCompatActivity {
 
     private void checkGameOver() {
         // get marks from each square
+
+        Boolean row1Over = checkRowOne();
+        Boolean row2Over = checkRowTwo();
+        Boolean row3Over = checkRowThree();
+        Boolean column1Over = checkColumnOne();
+        Boolean column2Over = checkColumnTwo();
+        Boolean column3Over = checkColumnThree();
+        Boolean topRightDiagonalOver = checkTopRightDiagonal();
+        Boolean topLeftDiagonalOver = checkTopLeftDiagonal();
+
+        if (row1Over || row2Over || row3Over || column1Over || column2Over || column3Over || topRightDiagonalOver || topLeftDiagonalOver) {
+            Toast toast = new Toast(this).makeText(this, "GAME OVER", Toast.LENGTH_LONG);
+            toast.setMargin(50, 50);
+            toast.show();
+        }
+    }
+
+    private Boolean checkTopLeftDiagonal() {
+        try {
+            Drawable sThreeD = sThree.getDrawable();
+            Drawable sFiveD = sFive.getDrawable();
+            Drawable sSevenD = sSeven.getDrawable();
+
+            Boolean topLeftDiagonalOver = sThreeD.equals(sFiveD) && sThreeD.equals(sSevenD);
+            return topLeftDiagonalOver;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private Boolean checkTopRightDiagonal() {
         try {
             Drawable sOneD = sOne.getDrawable();
-            Drawable sTwoD = sTwo.getDrawable();
-            Drawable sThreeD = sThree.getDrawable();
-            Drawable sFourD = sFour.getDrawable();
             Drawable sFiveD = sFive.getDrawable();
+            Drawable sNineD = sNine.getDrawable();
+
+            Boolean topRightDiagonalOver = sOneD.equals(sFiveD) && sOneD.equals(sNineD);
+            return topRightDiagonalOver;
+        } catch (Exception e) {
+             return false;
+        }
+    }
+
+    private Boolean checkColumnThree() {
+        try {
+            Drawable sThreeD = sThree.getDrawable();
             Drawable sSixD = sSix.getDrawable();
+            Drawable sNineD = sNine.getDrawable();
+
+            Boolean column3Over = sThreeD.equals(sSixD) && sThreeD.equals(sNineD);
+            return column3Over;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private Boolean checkColumnTwo() {
+        try {
+            Drawable sTwoD = sTwo.getDrawable();
+            Drawable sFiveD = sFive.getDrawable();
+            Drawable sEightD = sEight.getDrawable();
+
+            Boolean column2Over = sTwoD.equals(sFiveD) && sTwoD.equals(sEightD);
+            return column2Over;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private Boolean checkColumnOne() {
+        try {
+            Drawable sOneD = sOne.getDrawable();
+            Drawable sFourD = sFour.getDrawable();
+            Drawable sSevenD = sSeven.getDrawable();
+
+            Boolean column1Over = sOneD.equals(sFourD) && sOneD.equals(sSevenD);
+            return column1Over;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private Boolean checkRowThree() {
+        try {
             Drawable sSevenD = sSeven.getDrawable();
             Drawable sEightD = sEight.getDrawable();
             Drawable sNineD = sNine.getDrawable();
 
-            Boolean row1Over = sOneD.equals(sTwoD) && sOneD.equals(sThreeD);
-            Boolean row2Over = sFourD.equals(sFiveD) && sFourD.equals(sSixD);
             Boolean row3Over = sSevenD.equals(sEightD) && sSevenD.equals(sNineD);
+            return  row3Over;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-            Boolean column1Over = sOneD.equals(sFourD) && sOneD.equals(sSevenD);
-            Boolean column2Over = sTwoD.equals(sFiveD) && sTwoD.equals(sEightD);
-            Boolean column3Over = sThreeD.equals(sSixD) && sThreeD.equals(sNineD);
+    private Boolean checkRowTwo() {
+        try {
+            Drawable sFourD = sFour.getDrawable();
+            Drawable sFiveD = sFive.getDrawable();
+            Drawable sSixD = sSix.getDrawable();
 
-            Boolean topRightDiagonalOver = sOneD.equals(sFiveD) && sOneD.equals(sNineD);
-            Boolean topLeftDiagonalOver = sThreeD.equals(sFiveD) && sThreeD.equals(sSevenD);
-
-            if(row1Over || row2Over || row3Over || column1Over || column2Over || column3Over || topRightDiagonalOver || topLeftDiagonalOver) {
-                Toast toast = new Toast(this).makeText(this, "GAME OVER", Toast.LENGTH_LONG);
-                toast.setMargin(50, 50);
-                toast.show();
-            }
-        } catch (NullPointerException e) {
-            // game is not over!
+            Boolean row2Over = sFourD.equals(sFiveD) && sFourD.equals(sSixD);
+            return row2Over;
+        } catch (Exception e) {
+            return false;
         }
 
+    }
+
+    private Boolean checkRowOne() {
+        try {
+            Drawable sOneD = sOne.getDrawable();
+            Drawable sTwoD = sTwo.getDrawable();
+            Drawable sThreeD = sThree.getDrawable();
+
+            Boolean row1Over = sOneD.equals(sTwoD) && sOneD.equals(sThreeD);
+
+            return row1Over;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void draw(ImageView iv) {

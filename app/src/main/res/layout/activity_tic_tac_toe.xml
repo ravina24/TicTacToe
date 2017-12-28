@@ -25,9 +25,10 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
-            android:padding="3dp"
             android:cropToPadding="true"
-            android:onClick="makeMove"/>
+            android:padding="3dp"
+            android:onClick="makeMove"
+             />
 
         <ImageView
             android:id="@+id/sTwo"
