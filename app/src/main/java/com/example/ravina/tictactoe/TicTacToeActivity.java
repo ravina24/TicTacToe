@@ -36,6 +36,10 @@ public class TicTacToeActivity extends AppCompatActivity {
     Boolean sEightMarked;
     Boolean sNineMarked;
 
+    Boolean crossWon;
+    Boolean circleWon;
+    Boolean isTieGame;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +66,10 @@ public class TicTacToeActivity extends AppCompatActivity {
         sSevenMarked = false;
         sEightMarked = false;
         sNineMarked = false;
+
+        crossWon = false;
+        circleWon = false;
+        isTieGame = false;
 
         turn = 1;
 
@@ -115,11 +123,19 @@ public class TicTacToeActivity extends AppCompatActivity {
 
         isGameOver = checkGameOver();
 
-        if (isGameOver) {
-            Toast toast = new Toast(this).makeText(this, "GAME OVER", Toast.LENGTH_LONG);
+        if (isGameOver && crossWon) {
+            Toast toast = new Toast(this).makeText(this, "GAME OVER, PLAYER 1 WINS", Toast.LENGTH_LONG);
             toast.setMargin(0, 0);
             toast.show();
-        } else {
+        } else if (isGameOver && circleWon) {
+            Toast toast = new Toast(this).makeText(this, "GAME OVER, PLAYER 2 WINS", Toast.LENGTH_LONG);
+            toast.setMargin(0, 0);
+            toast.show();
+        } else if (isGameOver && isTieGame) {
+            Toast toast = new Toast(this).makeText(this, "GAME OVER, TIE GAME", Toast.LENGTH_LONG);
+            toast.setMargin(0, 0);
+            toast.show();
+        } else if (!isGameOver){
             // prompt other player to make move
             String player = "Go Player " + turn;
             Toast toast = new Toast(this).makeText(this, player, Toast.LENGTH_SHORT);
@@ -130,6 +146,9 @@ public class TicTacToeActivity extends AppCompatActivity {
     }
 
     private Boolean checkGameOver() {
+        // check if board is filled
+        Boolean tieGame = checkBoardFilled();
+
         // check all possible game overs for Win Situations
         Boolean row1Over = checkRowOne();
         Boolean row2Over = checkRowTwo();
@@ -140,8 +159,6 @@ public class TicTacToeActivity extends AppCompatActivity {
         Boolean topRightDiagonalOver = checkTopRightDiagonal();
         Boolean topLeftDiagonalOver = checkTopLeftDiagonal();
 
-        // check if board is filled
-        Boolean tieGame = checkBoardFilled();
 
         if (row1Over || row2Over || row3Over || column1Over || column2Over || column3Over
                 || topRightDiagonalOver || topLeftDiagonalOver || tieGame) {
@@ -163,8 +180,9 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable.ConstantState sEightD = sEight.getDrawable().getConstantState();
             Drawable.ConstantState sNineD = sNine.getDrawable().getConstantState();
 
-            if(sOneD != null && sTwoD != null && sThreeD != null && sFourD != null && sFiveD != null && sSixD != null
+            if (sOneD != null && sTwoD != null && sThreeD != null && sFourD != null && sFiveD != null && sSixD != null
                     && sSevenD != null && sEightD != null && sNineD != null) {
+                isTieGame = true;
                 return true;
             } else {
                 return false;
@@ -184,6 +202,11 @@ public class TicTacToeActivity extends AppCompatActivity {
 
             Boolean topLeftDiagonalOver = areDrawablesIdentical(sThreeD, sFiveD) && areDrawablesIdentical(sThreeD, sSevenD);
 
+            // to determine which player won
+            if (topLeftDiagonalOver && !isTieGame) {
+                isCross(sThreeD);
+            }
+
             return topLeftDiagonalOver;
         } catch (Exception e) {
             return false;
@@ -197,6 +220,11 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sNineD = sNine.getDrawable();
 
             Boolean topRightDiagonalOver = areDrawablesIdentical(sOneD, sFiveD) && areDrawablesIdentical(sOneD, sNineD);
+
+            // to determine which player won
+            if (topRightDiagonalOver && !isTieGame) {
+                isCross(sOneD);
+            }
 
             return topRightDiagonalOver;
         } catch (Exception e) {
@@ -212,6 +240,11 @@ public class TicTacToeActivity extends AppCompatActivity {
 
             Boolean column3Over = areDrawablesIdentical(sThreeD, sSixD) && areDrawablesIdentical(sThreeD, sNineD);
 
+            // to determine which player won
+            if (column3Over && !isTieGame) {
+                isCross(sThreeD);
+            }
+
             return column3Over;
         } catch (Exception e) {
             return false;
@@ -225,6 +258,11 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sEightD = sEight.getDrawable();
 
             Boolean column2Over = areDrawablesIdentical(sTwoD, sFiveD) && areDrawablesIdentical(sTwoD, sEightD);
+
+            // to determine which player won
+            if (column2Over && !isTieGame) {
+                isCross(sTwoD);
+            }
 
             return column2Over;
         } catch (Exception e) {
@@ -240,6 +278,11 @@ public class TicTacToeActivity extends AppCompatActivity {
 
             Boolean column1Over = areDrawablesIdentical(sOneD, sFourD) && areDrawablesIdentical(sOneD, sSevenD);
 
+            // to determine which player won
+            if (column1Over && !isTieGame) {
+                isCross(sOneD);
+            }
+
             return column1Over;
         } catch (Exception e) {
             return false;
@@ -253,6 +296,11 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sNineD = sNine.getDrawable();
 
             Boolean row3Over = areDrawablesIdentical(sSevenD, sEightD) && areDrawablesIdentical(sSevenD, sNineD);
+
+            // to determine which player won
+            if (row3Over && !isTieGame) {
+                isCross(sSevenD);
+            }
 
             return row3Over;
         } catch (Exception e) {
@@ -268,6 +316,11 @@ public class TicTacToeActivity extends AppCompatActivity {
 
             Boolean row2Over = areDrawablesIdentical(sFourD, sFiveD) && areDrawablesIdentical(sFourD, sSixD);
 
+            // to determine which player won
+            if (row2Over && !isTieGame) {
+                isCross(sFourD);
+            }
+
             return row2Over;
         } catch (Exception e) {
             return false;
@@ -282,6 +335,11 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable sThreeD = sThree.getDrawable();
 
             Boolean row1Over = areDrawablesIdentical(sOneD, sTwoD) && areDrawablesIdentical(sOneD, sThreeD);
+
+            // to determine which player won
+            if (row1Over && !isTieGame) {
+                isCross(sOneD);
+            }
 
             return row1Over;
         } catch (Exception e) {
@@ -331,6 +389,23 @@ public class TicTacToeActivity extends AppCompatActivity {
             drawable.draw(canvas);
         }
         return result;
+    }
+
+    /**
+     * returns true if d is a cross, false otherwise
+     *
+     * @param d Drawable d to determine shape of
+     */
+    private void isCross(Drawable d) {
+        Drawable cross = getResources().getDrawable(R.drawable.cross);
+        Drawable circle = getResources().getDrawable(R.drawable.circle);
+
+        if (areDrawablesIdentical(d, cross)) {
+            crossWon = true;
+        } else if (areDrawablesIdentical(d, circle)) {
+            circleWon = true;
+        }
+
     }
 
 }
