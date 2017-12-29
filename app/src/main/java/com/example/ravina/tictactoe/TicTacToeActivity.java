@@ -1,6 +1,9 @@
 package com.example.ravina.tictactoe;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,17 +13,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TicTacToeActivity extends AppCompatActivity {
+    public static final String SCORES_NAME = "MyScores";
+
+
     GridLayout board;
     Button rematchButton;
+    TextView scoreOne;
+    TextView scoreTwo;
+
     int turn;
+    int p1Score;
+    int p2Score;
 
     ImageView sOne;
     ImageView sTwo;
@@ -57,6 +69,8 @@ public class TicTacToeActivity extends AppCompatActivity {
         // initialize fields
         board = (GridLayout) findViewById(R.id.board);
         rematchButton = (Button) findViewById(R.id.buttonRematch);
+        scoreOne = (TextView) findViewById(R.id.scoreOne);
+        scoreTwo = (TextView) findViewById(R.id.scoreTwo);
 
         sOne = (ImageView) findViewById(R.id.sOne);
         sTwo = (ImageView) findViewById(R.id.sTwo);
@@ -86,6 +100,19 @@ public class TicTacToeActivity extends AppCompatActivity {
         isGameOver = false;
 
         turn = 1;
+
+
+
+//        // Remember scores from previous games
+//        SharedPreferences settings = getSharedPreferences(SCORES_NAME, 0);
+//        p1Score = settings.getInt("scoreOne", 0);
+//        p2Score = settings.getInt("scoreTwo", 0);
+//        updateScores();
+
+        p1Score = Integer.parseInt(getPreference("scoreOne", "0", this));
+        p2Score = Integer.parseInt(getPreference("scoreTwo", "0", this));
+        updateScores();
+
 
         //so the invisible area won't be clicked
         rematchButton.setClickable(false);
@@ -159,6 +186,9 @@ public class TicTacToeActivity extends AppCompatActivity {
             Toast toast = new Toast(this).makeText(this, "GAME OVER, PLAYER 1 WINS", Toast.LENGTH_LONG);
             toast.setMargin(0, 0);
             toast.show();
+            p1Score++;
+            updateScores();
+
             rematchButton.setVisibility(View.VISIBLE);
             rematchButton.setClickable(true);
 
@@ -166,14 +196,19 @@ public class TicTacToeActivity extends AppCompatActivity {
             Toast toast = new Toast(this).makeText(this, "GAME OVER, PLAYER 2 WINS", Toast.LENGTH_LONG);
             toast.setMargin(0, 0);
             toast.show();
+            p2Score++;
+            updateScores();
+
             rematchButton.setVisibility(View.VISIBLE);
             rematchButton.setClickable(true);
+
         } else if (isGameOver && isTieGame) {
             Toast toast = new Toast(this).makeText(this, "GAME OVER, TIE GAME", Toast.LENGTH_LONG);
             toast.setMargin(0, 0);
             toast.show();
             rematchButton.setVisibility(View.VISIBLE);
             rematchButton.setClickable(true);
+
         } else if (!isGameOver){
             // prompt other player to make move
             String player = "Go Player " + turn;
@@ -182,6 +217,14 @@ public class TicTacToeActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private void updateScores() {
+        String p1S = "" + p1Score;
+        String p2S = "" + p2Score;
+
+        scoreOne.setText(p1S);
+        scoreTwo.setText(p2S);
     }
 
     private Boolean checkGameOver() {
@@ -461,10 +504,85 @@ public class TicTacToeActivity extends AppCompatActivity {
         // below code is from https://stackoverflow.com/questions/15564614/how-to-restart-an-android-application-programmatically
         Intent i = getBaseContext().getPackageManager()
                 .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+
+//        //save scores MY CODE
+//        i.putExtra("scoreOne", p1Score);
+//        i.putExtra("scoreTwo", p2Score);
+
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
         startActivity(i);
 
     }
 
+    @Override
+    protected  void onStop() {
+        super.onStop();
+
+//        // We need an Editor object to make preference changes.
+//        // All objects are from android.context.Context
+//        SharedPreferences settings = getSharedPreferences(SCORES_NAME, 0);
+//        SharedPreferences.Editor editor = settings.edit();
+//
+//        editor.clear();
+//        editor.putInt("scoreOne", p1Score);
+//        editor.putInt("scoreTwo", p2Score);
+//
+//        editor.commit();
+        String p1S = "" + p1Score;
+        String p2S = "" + p2Score;
+        setPreference("scoreOne", p1S, this);
+        setPreference("scoreTwo", p2S, this);
+
+    }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle savedInstanceState) {
+//        super.onSaveInstanceState(savedInstanceState);
+//        // Save UI state changes to the savedInstanceState.
+//        // This bundle will be passed to onCreate if the process is
+//        // killed and restarted.
+//        savedInstanceState.putInt("scoreOne", p1Score);
+//        savedInstanceState.putInt("scoreTwo", p2Score);
+//
+//        // etc.
+//    }
+//
+//    @Override
+//    public void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        // Restore UI state from the savedInstanceState.
+//        // This bundle has also been passed to onCreate.
+//
+//
+//        int p1Score = savedInstanceState.getInt("scoreOne", 0);
+//        int p2Score = savedInstanceState.getInt("scoreTwo", 0);
+//    }
+
+    static SharedPreferences sh_Pref;
+    public static String Preference_Name = "AppData";
+
+
+
+    public static String getPreference(String key, String Default,
+                                       Activity activity)
+    {
+        sh_Pref = activity.getSharedPreferences(Preference_Name, Context.MODE_PRIVATE);
+        return sh_Pref.getString(key, Default);
+    }
+
+    public static void setPreference(String key, String value, Activity activity)
+    {
+        if (value != null)
+        {
+
+            sh_Pref = activity.getSharedPreferences(Preference_Name, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sh_Pref.edit();
+            editor.putString(key, value);
+            editor.commit();
+
+
+        }
+
+    }
 }
