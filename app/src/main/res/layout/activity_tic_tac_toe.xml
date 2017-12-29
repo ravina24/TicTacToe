@@ -104,7 +104,16 @@
 
     </GridLayout>
 
-
+    <Button
+        android:id="@+id/buttonRematch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/board"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:onClick="rematch"
+        android:text="REMATCH"
+        android:visibility="invisible" />
 
 
 </RelativeLayout>

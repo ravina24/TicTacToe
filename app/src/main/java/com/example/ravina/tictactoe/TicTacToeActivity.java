@@ -1,5 +1,6 @@
 package com.example.ravina.tictactoe;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -7,13 +8,18 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TicTacToeActivity extends AppCompatActivity {
     GridLayout board;
+    Button rematchButton;
     int turn;
 
     ImageView sOne;
@@ -25,6 +31,8 @@ public class TicTacToeActivity extends AppCompatActivity {
     ImageView sSeven;
     ImageView sEight;
     ImageView sNine;
+
+    List<ImageView> squares;
 
     Boolean sOneMarked;
     Boolean sTwoMarked;
@@ -39,6 +47,7 @@ public class TicTacToeActivity extends AppCompatActivity {
     Boolean crossWon;
     Boolean circleWon;
     Boolean isTieGame;
+    Boolean isGameOver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +56,8 @@ public class TicTacToeActivity extends AppCompatActivity {
 
         // initialize fields
         board = (GridLayout) findViewById(R.id.board);
+        rematchButton = (Button) findViewById(R.id.buttonRematch);
+
         sOne = (ImageView) findViewById(R.id.sOne);
         sTwo = (ImageView) findViewById(R.id.sTwo);
         sThree = (ImageView) findViewById(R.id.sThree);
@@ -56,6 +67,8 @@ public class TicTacToeActivity extends AppCompatActivity {
         sSeven = (ImageView) findViewById(R.id.sSeven);
         sEight = (ImageView) findViewById(R.id.sEight);
         sNine = (ImageView) findViewById(R.id.sNine);
+
+        addSquares();
 
         sOneMarked = false;
         sTwoMarked = false;
@@ -70,8 +83,12 @@ public class TicTacToeActivity extends AppCompatActivity {
         crossWon = false;
         circleWon = false;
         isTieGame = false;
+        isGameOver = false;
 
         turn = 1;
+
+        //so the invisible area won't be clicked
+        rematchButton.setClickable(false);
 
         // prompt other player to make move
         String player = "Go Player 1";
@@ -82,12 +99,27 @@ public class TicTacToeActivity extends AppCompatActivity {
     }
 
     /**
+     * adds squares to the List<ImageView>
+     */
+    private void addSquares() {
+        squares = new ArrayList<>();
+        squares.add(sOne);
+        squares.add(sTwo);
+        squares.add(sThree);
+        squares.add(sFour);
+        squares.add(sFive);
+        squares.add(sSix);
+        squares.add(sSeven);
+        squares.add(sEight);
+        squares.add(sNine);
+    }
+
+    /**
      * If turn is 0, make a cross on view. If turn is 1, make circle on view
      *
      * @param view tile that was clicked
      */
     public void makeMove(View view) {
-        Boolean isGameOver = false;
 
         if (!isGameOver) {
             if (view.equals(sOne) && !sOneMarked) {
@@ -127,14 +159,21 @@ public class TicTacToeActivity extends AppCompatActivity {
             Toast toast = new Toast(this).makeText(this, "GAME OVER, PLAYER 1 WINS", Toast.LENGTH_LONG);
             toast.setMargin(0, 0);
             toast.show();
+            rematchButton.setVisibility(View.VISIBLE);
+            rematchButton.setClickable(true);
+
         } else if (isGameOver && circleWon) {
             Toast toast = new Toast(this).makeText(this, "GAME OVER, PLAYER 2 WINS", Toast.LENGTH_LONG);
             toast.setMargin(0, 0);
             toast.show();
+            rematchButton.setVisibility(View.VISIBLE);
+            rematchButton.setClickable(true);
         } else if (isGameOver && isTieGame) {
             Toast toast = new Toast(this).makeText(this, "GAME OVER, TIE GAME", Toast.LENGTH_LONG);
             toast.setMargin(0, 0);
             toast.show();
+            rematchButton.setVisibility(View.VISIBLE);
+            rematchButton.setClickable(true);
         } else if (!isGameOver){
             // prompt other player to make move
             String player = "Go Player " + turn;
@@ -180,8 +219,15 @@ public class TicTacToeActivity extends AppCompatActivity {
             Drawable.ConstantState sEightD = sEight.getDrawable().getConstantState();
             Drawable.ConstantState sNineD = sNine.getDrawable().getConstantState();
 
+            Drawable sNineDrawable = sNine.getDrawable();
+            Drawable defaultBackground = getResources().getDrawable(R.drawable.defaultbackground);
+
+
+            // in case of rematch when all squares are transparent, I need to guard with:
+            Boolean rematchScenario = areDrawablesIdentical(sNineDrawable, defaultBackground);
+
             if (sOneD != null && sTwoD != null && sThreeD != null && sFourD != null && sFiveD != null && sSixD != null
-                    && sSevenD != null && sEightD != null && sNineD != null) {
+                    && sSevenD != null && sEightD != null && sNineD != null && !rematchScenario) {
                 isTieGame = true;
                 return true;
             } else {
@@ -405,6 +451,19 @@ public class TicTacToeActivity extends AppCompatActivity {
         } else if (areDrawablesIdentical(d, circle)) {
             circleWon = true;
         }
+
+    }
+
+    /**
+     * restarts application
+     */
+    public void rematch(View view) {
+        // below code is from https://stackoverflow.com/questions/15564614/how-to-restart-an-android-application-programmatically
+        Intent i = getBaseContext().getPackageManager()
+                .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(i);
 
     }
 
