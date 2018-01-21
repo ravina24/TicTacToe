@@ -31,8 +31,9 @@ public class TicTacToeActivity extends AppCompatActivity {
     TextView scoreTwo;
 
     int turn;
-    int p1Score;
-    int p2Score;
+    int p1Score, p2Score;
+
+    Tile t1, t2, t3, t4, t5, t6, t7, t8, t9;
 
     ImageView sOne;
     ImageView sTwo;
@@ -44,17 +45,17 @@ public class TicTacToeActivity extends AppCompatActivity {
     ImageView sEight;
     ImageView sNine;
 
-    List<ImageView> squares;
+    List<ImageView> squares; // list of image views
 
-    Boolean sOneMarked;
-    Boolean sTwoMarked;
-    Boolean sThreeMarked;
-    Boolean sFourMarked;
-    Boolean sFiveMarked;
-    Boolean sSixMarked;
-    Boolean sSevenMarked;
-    Boolean sEightMarked;
-    Boolean sNineMarked;
+//    Boolean sOneMarked;
+//    Boolean sTwoMarked;
+//    Boolean sThreeMarked;
+//    Boolean sFourMarked;
+//    Boolean sFiveMarked;
+//    Boolean sSixMarked;
+//    Boolean sSevenMarked;
+//    Boolean sEightMarked;
+//    Boolean sNineMarked;
 
     Boolean crossWon;
     Boolean circleWon;
@@ -72,27 +73,22 @@ public class TicTacToeActivity extends AppCompatActivity {
         scoreOne = (TextView) findViewById(R.id.scoreOne);
         scoreTwo = (TextView) findViewById(R.id.scoreTwo);
 
-        sOne = (ImageView) findViewById(R.id.sOne);
-        sTwo = (ImageView) findViewById(R.id.sTwo);
-        sThree = (ImageView) findViewById(R.id.sThree);
-        sFour = (ImageView) findViewById(R.id.sFour);
-        sFive = (ImageView) findViewById(R.id.sFive);
-        sSix = (ImageView) findViewById(R.id.sSix);
-        sSeven = (ImageView) findViewById(R.id.sSeven);
-        sEight = (ImageView) findViewById(R.id.sEight);
-        sNine = (ImageView) findViewById(R.id.sNine);
+        assignImageViews();
 
-        addSquares();
+        assignTiles();
 
-        sOneMarked = false;
-        sTwoMarked = false;
-        sThreeMarked = false;
-        sFourMarked = false;
-        sFiveMarked = false;
-        sSixMarked = false;
-        sSevenMarked = false;
-        sEightMarked = false;
-        sNineMarked = false;
+
+        //addSquares();
+
+//        sOneMarked = false;
+//        sTwoMarked = false;
+//        sThreeMarked = false;
+//        sFourMarked = false;
+//        sFiveMarked = false;
+//        sSixMarked = false;
+//        sSevenMarked = false;
+//        sEightMarked = false;
+//        sNineMarked = false;
 
         crossWon = false;
         circleWon = false;
@@ -125,6 +121,51 @@ public class TicTacToeActivity extends AppCompatActivity {
 
     }
 
+    // assigns each imageview and matches ids by setting the id of the actual imageview to the copy's tag
+    private void assignImageViews() {
+        sOne = (ImageView) findViewById(R.id.sOne);
+        sOne.setTag(R.id.sOne);
+
+        sTwo = (ImageView) findViewById(R.id.sTwo);
+        sTwo.setTag(R.id.sTwo);
+
+        sThree = (ImageView) findViewById(R.id.sThree);
+        sThree.setTag(R.id.sThree);
+
+        sFour = (ImageView) findViewById(R.id.sFour);
+        sFour.setTag(R.id.sFour);
+
+        sFive = (ImageView) findViewById(R.id.sFive);
+        sFive.setTag(R.id.sFive);
+
+        sSix = (ImageView) findViewById(R.id.sSix);
+        sSix.setTag(R.id.sSix);
+
+        sSeven = (ImageView) findViewById(R.id.sSeven);
+        sSeven.setTag(R.id.sSeven);
+
+        sEight = (ImageView) findViewById(R.id.sEight);
+        sEight.setTag(R.id.sEight);
+
+        sNine = (ImageView) findViewById(R.id.sNine);
+        sNine.setTag(R.id.sNine);
+    }
+
+    /**
+     * creates tiles from imageviews
+     */
+    private void assignTiles() {
+        t1 = new Tile(sOne);
+        t2 = new Tile(sTwo);
+        t3 = new Tile(sThree);
+        t4 = new Tile(sFour);
+        t5 = new Tile(sFive);
+        t6 = new Tile(sSix);
+        t7 = new Tile(sSeven);
+        t8 = new Tile(sEight);
+        t9 = new Tile(sNine);
+    }
+
     /**
      * adds squares to the List<ImageView>
      */
@@ -141,41 +182,45 @@ public class TicTacToeActivity extends AppCompatActivity {
         squares.add(sNine);
     }
 
+
+
+
+
     /**
-     * If turn is 0, make a cross on view. If turn is 1, make circle on view
+     * If move is valid, draw it and set the tile to marked.
      *
-     * @param view tile that was clicked
+     * @param view imageview that was clicked
      */
     public void makeMove(View view) {
 
         if (!isGameOver) {
-            if (view.equals(sOne) && !sOneMarked) {
+            if (validMove(view, t1)) {
                 draw(sOne);
-                sOneMarked = true;
-            } else if (view.equals(sTwo) && !sTwoMarked) {
+                t1.setMarked(true);
+            } else if (validMove(view, t2)) {
                 draw(sTwo);
-                sTwoMarked = true;
-            } else if (view.equals(sThree) && !sThreeMarked) {
+                t2.setMarked(true);
+            } else if (validMove(view, t3)) {
                 draw(sThree);
-                sThreeMarked = true;
-            } else if (view.equals(sFour) && !sFourMarked) {
+                t3.setMarked(true);
+            } else if (validMove(view, t4)) {
                 draw(sFour);
-                sFourMarked = true;
-            } else if (view.equals(sFive) && !sFiveMarked) {
+                t4.setMarked(true);
+            } else if (validMove(view, t5)) {
                 draw(sFive);
-                sFiveMarked = true;
-            } else if (view.equals(sSix) && !sSixMarked) {
+                t5.setMarked(true);
+            } else if (validMove(view, t6)) {
                 draw(sSix);
-                sSixMarked = true;
-            } else if (view.equals(sSeven) && !sSevenMarked) {
+                t6.setMarked(true);
+            } else if (validMove(view, t7)) {
                 draw(sSeven);
-                sSevenMarked = true;
-            } else if (view.equals(sEight) && !sEightMarked) {
+                t7.setMarked(true);
+            } else if (validMove(view, t8)) {
                 draw(sEight);
-                sEightMarked = true;
-            } else if (view.equals(sNine) && !sNineMarked) {
+                t8.setMarked(true);
+            } else if (validMove(view, t9)) {
                 draw(sNine);
-                sNineMarked = true;
+                t9.setMarked(true);
             }
         }
 
@@ -217,6 +262,19 @@ public class TicTacToeActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    /**
+     * checks if move is valid
+     * @param view imageview that was clicked
+     * @param t tile on board
+     * @return true if view matches the tile's imageview and if the tile is not marked. False otherwise.
+     *          Note: view matches tile's imageview if view id matches tag of tile's iamgeview
+     */
+    private boolean validMove(View view, Tile t) {
+        int tileIvId = (int) t.getIv().getTag();
+
+        return view.getId() == tileIvId && !t.isMarked();
     }
 
     private void updateScores() {
@@ -436,6 +494,10 @@ public class TicTacToeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * If turn is 1, draw a cross on iv. Else, draw a circle on iv
+     * @param iv imageview to draw on
+     */
     private void draw(ImageView iv) {
         if (turn == 1) {
             iv.setImageResource(R.drawable.cross);
