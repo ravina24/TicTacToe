@@ -1,9 +1,5 @@
 package com.example.ravina.tictactoe;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,7 +15,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class TicTacToeActivity extends AppCompatActivity {
     GridLayout board;
@@ -313,8 +308,6 @@ public class TicTacToeActivity extends AppCompatActivity {
 
         return over;
     }
-
-
 
     /**
      * If turn is 1, draw a cross on iv. Else, draw a circle on iv
