@@ -38,21 +38,4 @@ public class Tile {
     public ImageView getIv() {
         return iv;
     }
-
-
-    // A tile is equal to another tile if they have the same imageview
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Tile tile = (Tile) o;
-
-        return iv != null ? iv.equals(tile.iv) : tile.iv == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return iv != null ? iv.hashCode() : 0;
-    }
 }

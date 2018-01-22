@@ -22,36 +22,19 @@ import java.util.List;
 import java.util.Map;
 
 public class TicTacToeActivity extends AppCompatActivity {
-    public static final String SCORES_NAME = "MyScores";
-
-
     GridLayout board;
     Button rematchButton;
-    TextView scoreOne;
-    TextView scoreTwo;
+    TextView scoreOne, scoreTwo;
 
-    int turn;
-    int p1Score, p2Score;
+    int turn, p1Score, p2Score;
 
     Tile t1, t2, t3, t4, t5, t6, t7, t8, t9;
 
-    ImageView sOne;
-    ImageView sTwo;
-    ImageView sThree;
-    ImageView sFour;
-    ImageView sFive;
-    ImageView sSix;
-    ImageView sSeven;
-    ImageView sEight;
-    ImageView sNine;
+    ImageView sOne, sTwo, sThree, sFour, sFive, sSix, sSeven, sEight, sNine;
 
     List<Tile> tiles;
 
-
-    Boolean crossWon;
-    Boolean circleWon;
-    Boolean isTieGame;
-    Boolean isGameOver;
+    Boolean crossWon, circleWon, isTieGame, isGameOver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +135,7 @@ public class TicTacToeActivity extends AppCompatActivity {
 
         if(isGameOver) {
             handleGameOver();
-        } else if (!isGameOver){
+        } else {
             // prompt other player to make move
             String player = "Go Player " + turn;
             Toast toast = new Toast(this).makeText(this, player, Toast.LENGTH_SHORT);
@@ -228,7 +211,9 @@ public class TicTacToeActivity extends AppCompatActivity {
             rematchButton.setClickable(true);
 
         } else {
-            isGameOver = false;
+            Toast toast = new Toast(this).makeText(this, "Something went wrong", Toast.LENGTH_LONG);
+            toast.setMargin(0, 0);
+            toast.show();
 
         }
     }
@@ -238,7 +223,7 @@ public class TicTacToeActivity extends AppCompatActivity {
      * @param view imageview that was clicked
      * @param t tile on board
      * @return true if view matches the tile's imageview and if the tile is not marked. False otherwise.
-     *          Note: view matches tile's imageview if view id matches tag of tile's iamgeview
+     *          Note: view matches tile's imageview if view id matches tag of tile's imageview
      */
     private boolean validMove(View view, Tile t) {
         int tileIvId = (int) t.getIv().getTag();
@@ -262,18 +247,18 @@ public class TicTacToeActivity extends AppCompatActivity {
         Boolean tieGame = checkBoardFilled();
 
         // check all possible game overs for Win Situations
-        Boolean row1Over = checkRowOne();
-        Boolean row2Over = checkRowTwo();
-        Boolean row3Over = checkRowThree();
-        Boolean column1Over = checkColumnOne();
-        Boolean column2Over = checkColumnTwo();
-        Boolean column3Over = checkColumnThree();
-        Boolean topRightDiagonalOver = checkTopRightDiagonal();
-        Boolean topLeftDiagonalOver = checkTopLeftDiagonal();
+        Boolean row1Over = checkOver(t1, t2, t3);
+        Boolean row2Over = checkOver(t4, t5, t6);
+        Boolean row3Over = checkOver(t7, t8, t9);
+        Boolean column1Over = checkOver(t1, t4, t7);
+        Boolean column2Over = checkOver(t2, t5, t8);
+        Boolean column3Over = checkOver(t3, t6, t9);
+        Boolean topRightDiagonalOver = checkOver(t3, t5, t7);
+        Boolean topLeftDiagonalOver = checkOver(t1, t5, t9);
 
 
         if (row1Over || row2Over || row3Over || column1Over || column2Over || column3Over
-                || topRightDiagonalOver || topLeftDiagonalOver) {
+                || topRightDiagonalOver || topLeftDiagonalOver) { // winning scenarios
             return true;
         } else if (tieGame) { //because player may win on last try
             return true;
@@ -305,158 +290,31 @@ public class TicTacToeActivity extends AppCompatActivity {
 
     }
 
-    private Boolean checkTopLeftDiagonal() {
-        try {
-            Drawable sThreeD = sThree.getDrawable();
-            Drawable sFiveD = sFive.getDrawable();
-            Drawable sSevenD = sSeven.getDrawable();
+    /**
+     * @param t1 tile 1
+     * @param t2 tile 2
+     * @param t3 tile 3
+     * @return true if t1, t2, t3 have the same drawables and are all marked. False otherwise
+     */
+    private Boolean checkOver(Tile t1, Tile t2, Tile t3) {
+        Drawable t1D = t1.getIv().getDrawable();
+        Drawable t2D = t2.getIv().getDrawable();
+        Drawable t3D = t3.getIv().getDrawable();
 
-            Boolean topLeftDiagonalOver = areDrawablesIdentical(sThreeD, sFiveD) && areDrawablesIdentical(sThreeD, sSevenD);
+        Boolean hasSameDrawables = areDrawablesIdentical(t1D, t2D) && areDrawablesIdentical(t1D, t3D);
+        Boolean allTilesMarked = t1.isMarked() && t2.isMarked() && t3.isMarked();
 
-            // to determine which player won
-            if (topLeftDiagonalOver) {
-                isCross(sThreeD);
-            }
+        Boolean over = hasSameDrawables && allTilesMarked;
 
-            return topLeftDiagonalOver;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private Boolean checkTopRightDiagonal() {
-        try {
-            Drawable sOneD = sOne.getDrawable();
-            Drawable sFiveD = sFive.getDrawable();
-            Drawable sNineD = sNine.getDrawable();
-
-            Boolean topRightDiagonalOver = areDrawablesIdentical(sOneD, sFiveD) && areDrawablesIdentical(sOneD, sNineD);
-
-            // to determine which player won
-            if (topRightDiagonalOver) {
-                isCross(sOneD);
-            }
-
-            return topRightDiagonalOver;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private Boolean checkColumnThree() {
-        try {
-            Drawable sThreeD = sThree.getDrawable();
-            Drawable sSixD = sSix.getDrawable();
-            Drawable sNineD = sNine.getDrawable();
-
-            Boolean column3Over = areDrawablesIdentical(sThreeD, sSixD) && areDrawablesIdentical(sThreeD, sNineD);
-
-            // to determine which player won
-            if (column3Over) {
-                isCross(sThreeD);
-            }
-
-            return column3Over;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private Boolean checkColumnTwo() {
-        try {
-            Drawable sTwoD = sTwo.getDrawable();
-            Drawable sFiveD = sFive.getDrawable();
-            Drawable sEightD = sEight.getDrawable();
-
-            Boolean column2Over = areDrawablesIdentical(sTwoD, sFiveD) && areDrawablesIdentical(sTwoD, sEightD);
-
-            // to determine which player won
-            if (column2Over) {
-                isCross(sTwoD);
-            }
-
-            return column2Over;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private Boolean checkColumnOne() {
-        try {
-            Drawable sOneD = sOne.getDrawable();
-            Drawable sFourD = sFour.getDrawable();
-            Drawable sSevenD = sSeven.getDrawable();
-
-            Boolean column1Over = areDrawablesIdentical(sOneD, sFourD) && areDrawablesIdentical(sOneD, sSevenD);
-
-            // to determine which player won
-            if (column1Over) {
-                isCross(sOneD);
-            }
-
-            return column1Over;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private Boolean checkRowThree() {
-        try {
-            Drawable sSevenD = sSeven.getDrawable();
-            Drawable sEightD = sEight.getDrawable();
-            Drawable sNineD = sNine.getDrawable();
-
-            Boolean row3Over = areDrawablesIdentical(sSevenD, sEightD) && areDrawablesIdentical(sSevenD, sNineD);
-
-            // to determine which player won
-            if (row3Over) {
-                isCross(sSevenD);
-            }
-
-            return row3Over;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private Boolean checkRowTwo() {
-        try {
-            Drawable sFourD = sFour.getDrawable();
-            Drawable sFiveD = sFive.getDrawable();
-            Drawable sSixD = sSix.getDrawable();
-
-            Boolean row2Over = areDrawablesIdentical(sFourD, sFiveD) && areDrawablesIdentical(sFourD, sSixD);
-
-            // to determine which player won
-            if (row2Over) {
-                isCross(sFourD);
-            }
-
-            return row2Over;
-        } catch (Exception e) {
-            return false;
+        // to determine which player won
+        if(over) {
+            isCross(t1.getIv().getDrawable());
         }
 
+        return over;
     }
 
-    private Boolean checkRowOne() {
-        try {
-            Drawable sOneD = sOne.getDrawable();
-            Drawable sTwoD = sTwo.getDrawable();
-            Drawable sThreeD = sThree.getDrawable();
 
-            Boolean row1Over = areDrawablesIdentical(sOneD, sTwoD) && areDrawablesIdentical(sOneD, sThreeD);
-
-            // to determine which player won
-            if (row1Over) {
-                isCross(sOneD);
-            }
-
-            return row1Over;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     /**
      * If turn is 1, draw a cross on iv. Else, draw a circle on iv
@@ -507,7 +365,7 @@ public class TicTacToeActivity extends AppCompatActivity {
     }
 
     /**
-     * returns true if d is a cross, false otherwise
+     * sets crossWon to true if d is a cross, otherwise sets circleWon to true
      *
      * @param d Drawable d to determine shape of
      */
@@ -524,7 +382,7 @@ public class TicTacToeActivity extends AppCompatActivity {
     }
 
     /**
-     * clear each tile's imageview and set the tile to marked. Set all booleans as in beginning. Hide rematch button.
+     * clear each tile's imageview and set the tile to marked. Put app in matchBeginState
      * @param view
      */
     public void rematch(View view) {
@@ -555,92 +413,4 @@ public class TicTacToeActivity extends AppCompatActivity {
         toast.show();
     }
 
-    /**
-     * restarts application
-     */
-//    public void rematch(View view) {
-//        // below code is from https://stackoverflow.com/questions/15564614/how-to-restart-an-android-application-programmatically
-//        Intent i = getBaseContext().getPackageManager()
-//                .getLaunchIntentForPackage( getBaseContext().getPackageName() );
-//
-////        //save scores MY CODE
-////        i.putExtra("scoreOne", p1Score);
-////        i.putExtra("scoreTwo", p2Score);
-//
-//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        finish();
-//        startActivity(i);
-//
-//    }
-
-//    @Override
-//    protected  void onStop() {
-//        super.onStop();
-//
-////        // We need an Editor object to make preference changes.
-////        // All objects are from android.context.Context
-////        SharedPreferences settings = getSharedPreferences(SCORES_NAME, 0);
-////        SharedPreferences.Editor editor = settings.edit();
-////
-////        editor.clear();
-////        editor.putInt("scoreOne", p1Score);
-////        editor.putInt("scoreTwo", p2Score);
-////
-////        editor.commit();
-//        String p1S = "" + p1Score;
-//        String p2S = "" + p2Score;
-//        setPreference("scoreOne", p1S, this);
-//        setPreference("scoreTwo", p2S, this);
-//
-//    }
-
-//    @Override
-//    public void onSaveInstanceState(Bundle savedInstanceState) {
-//        super.onSaveInstanceState(savedInstanceState);
-//        // Save UI state changes to the savedInstanceState.
-//        // This bundle will be passed to onCreate if the process is
-//        // killed and restarted.
-//        savedInstanceState.putInt("scoreOne", p1Score);
-//        savedInstanceState.putInt("scoreTwo", p2Score);
-//
-//        // etc.
-//    }
-//
-//    @Override
-//    public void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        // Restore UI state from the savedInstanceState.
-//        // This bundle has also been passed to onCreate.
-//
-//
-//        int p1Score = savedInstanceState.getInt("scoreOne", 0);
-//        int p2Score = savedInstanceState.getInt("scoreTwo", 0);
-//    }
-
-//    static SharedPreferences sh_Pref;
-//    public static String Preference_Name = "AppData";
-//
-//
-//
-//    public static String getPreference(String key, String Default,
-//                                       Activity activity)
-//    {
-//        sh_Pref = activity.getSharedPreferences(Preference_Name, Context.MODE_PRIVATE);
-//        return sh_Pref.getString(key, Default);
-//    }
-//
-//    public static void setPreference(String key, String value, Activity activity)
-//    {
-//        if (value != null)
-//        {
-//
-//            sh_Pref = activity.getSharedPreferences(Preference_Name, Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = sh_Pref.edit();
-//            editor.putString(key, value);
-//            editor.commit();
-//
-//
-//        }
-//
-//    }
 }

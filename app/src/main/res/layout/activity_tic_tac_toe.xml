@@ -25,6 +25,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
+            android:src="@drawable/defaultbackground"
             android:cropToPadding="true"
             android:padding="3dp"
             android:onClick="makeMove"
@@ -35,6 +36,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
+            android:src="@drawable/defaultbackground"
             android:padding="3dp"
             android:cropToPadding="true"
             android:onClick="makeMove"/>
@@ -44,6 +46,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
+            android:src="@drawable/defaultbackground"
             android:padding="3dp"
             android:cropToPadding="true"
             android:onClick="makeMove"/>
@@ -53,6 +56,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
+            android:src="@drawable/defaultbackground"
             android:padding="3dp"
             android:cropToPadding="true"
             android:onClick="makeMove"/>
@@ -62,6 +66,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
+            android:src="@drawable/defaultbackground"
             android:padding="3dp"
             android:cropToPadding="true"
             android:onClick="makeMove"/>
@@ -71,6 +76,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
+            android:src="@drawable/defaultbackground"
             android:padding="3dp"
             android:cropToPadding="true"
             android:onClick="makeMove"/>
@@ -80,6 +86,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
+            android:src="@drawable/defaultbackground"
             android:padding="3dp"
             android:cropToPadding="true"
             android:onClick="makeMove"/>
@@ -89,6 +96,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
+            android:src="@drawable/defaultbackground"
             android:padding="3dp"
             android:cropToPadding="true"
             android:onClick="makeMove"/>
@@ -98,6 +106,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/border"
+            android:src="@drawable/defaultbackground"
             android:padding="3dp"
             android:cropToPadding="true"
             android:onClick="makeMove"/>
